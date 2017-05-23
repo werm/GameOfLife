@@ -31,7 +31,6 @@ describe('Build grid', () => {
   });
 
   it('should have a width', () => {
-    console.log(grid.dimensions);
     expect(grid.dimensions.width > 0).to.be.true;
   })
 
@@ -40,27 +39,34 @@ describe('Build grid', () => {
   })
 })
 
-describe('Create Cells', () => {
-  let cell;
+describe('Cells', () => {
+  let cell, theCell;
 
   beforeEach(() => {
 
     const fixture = '<div id="gol"></div>';
     document.body.insertAdjacentHTML('afterbegin', fixture);
     cell = GameOfLife.Cell;
-    cell.create(1, 1);
+    grid = GameOfLife.Grid;
+    grid.init(10, 10);
+    theCell = cell.create(1, 1);
 
   });
 
-  it('should have a cell at 1 x 1', () => {
-    cell.get(1, 1)
-    .then((res) => {
-      console.log(res);
-      expect(res).to.exist;
-    })
-    .catch((err) => {
-      console.error(err);
-    })
+  it('should have a cell on the grid with neighbors', () => {
+    expect(cell.examine(theCell).liveNeighbors).to.be.a('number');
+  })
+
+  it('should be alive with 2 or 3 neighbor cells', () => {
+    theCell.liveNeighbors = 3;
+    cell.update(theCell);
+    expect(theCell.live).to.be.true;
   });
+
+  it('should be dead if neighbors <= 1 || >= 4', () => {
+    theCell.liveNeighbors = 5;
+    cell.update(theCell);
+    expect(theCell.live).to.be.false;
+  })
 
 })

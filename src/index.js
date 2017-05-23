@@ -52,7 +52,6 @@ const Grid = {
   },
 
   tick() {
-
     Grid.traverse((ctxt, cell) => {
       Cell.examine(cell);
     });
@@ -77,40 +76,25 @@ const Cell = {
     return cell;
   },
 
-  get(x, y) {
-    return new Promise((resolve, reject) => {
-      Grid.rows.forEach((row) => {
-        row.forEach((cell, i) => {
-          if (cell.x === x && cell.y === y) {
-            resolve(cell);
-          }
-        });
-      });
-      reject(new Error('No matching cell!'));
-    });
-
-    return targetCell;
-  },
-
   examine(cell) {
     cell.liveNeighbors = 0;
     
-    return Cell.checkNeighbors(cell, (ctxt, neighbor) => {
+    Cell.checkNeighbors(cell, (ctxt, neighbor) => {
       if (neighbor.live) {
         cell.liveNeighbors++;
       }
     });
+
+    return cell;
   },
 
   update(cell) {
-    let liveNeighbors = cell.liveNeighbors;
-
     if (cell.live) {
-      if (liveNeighbors <= 1 || liveNeighbors >= 4) {
+      if (cell.liveNeighbors <= 1 || cell.liveNeighbors >= 4) {
         cell.live = false;
       }
     } else
-    if (liveNeighbors === 3) {
+    if (cell.liveNeighbors === 2 || cell.liveNeighbors === 3) {
       cell.live = true;
     }
     return cell;
