@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Of Life</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    .cell {
+      /*display: inline-block;*/
+      /*border: 1px solid rgba(0,0,0,0.25);*/
+      width: 4px;
+      height: 4px;
+    }
+    .cell.alive {
+      background-color: #ccc;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Game of Life!</h1>
+  <!-- <div id="gol"></div> -->
+  <button class="start" type="button">Start</button>
+  <button class="stop" type="button">Stop</button>
+  <table>
+    <tbody id="gol"></tbody>
+  </table>
+  <script src="dist/bundle.js"></script>
+  <script>
+    var grid = GameOfLife.Grid;
+    var cell = GameOfLife.Cell;
+    
+    grid.init(50, 50);
+
+    cell.get(100, 814)
+    .then((cell) => {
+      console.log(cell);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+    
+    setInterval(grid.tick, 2000);
+
+  </script>
+</body>
+</html>
